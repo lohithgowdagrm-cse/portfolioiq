@@ -201,11 +201,19 @@ class PortfolioCalculationService:
         position_details: List[Dict[str, Any]] = []
 
         for pos in positions:
-            latest_quote = cls.get_latest_market_price(pos.instrument)
-            ltp = latest_quote.price if latest_quote else pos.average_buy_price
-            prev_close = latest_quote.previous_close if latest_quote else ltp
+            if pos.option_contract:
+                from apps.options.services.service import OptionsService
+                opt_data = OptionsService.evaluate_contract(pos.option_contract)
+                ltp = Decimal(str(opt_data["theoretical_price"])).quantize(Decimal("0.0001"))
+                prev_close = ltp
+                mult = Decimal(str(pos.option_contract.contract_multiplier))
+                market_val = (pos.quantity * ltp * mult).quantize(Decimal("0.0001"))
+            else:
+                latest_quote = cls.get_latest_market_price(pos.instrument)
+                ltp = latest_quote.price if latest_quote else pos.average_buy_price
+                prev_close = latest_quote.previous_close if latest_quote else ltp
+                market_val = pos.quantity * ltp
 
-            market_val = pos.quantity * ltp
             unrealized_pnl = market_val - pos.total_invested
             unrealized_pct = (
                 (unrealized_pnl / pos.total_invested * Decimal("100"))

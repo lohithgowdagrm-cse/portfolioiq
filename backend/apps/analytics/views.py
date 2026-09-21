@@ -86,7 +86,10 @@ class PerformanceChartView(views.APIView):
         
         bench_map = {bp.price_timestamp.strftime("%Y-%m-%d"): float(bp.price) for bp in benchmark_prices}
         bench_start = next(iter(bench_map.values()), 25000.0)
-        port_start = curve_points[0]["total_equity"] if curve_points else 1000000.0
+        if bench_start <= 0:
+            bench_start = 1.0
+
+        port_start = curve_points[0]["total_equity"] if (curve_points and curve_points[0]["total_equity"] > 0) else 1.0
 
         for pt in curve_points:
             d = pt["date"]
@@ -94,6 +97,7 @@ class PerformanceChartView(views.APIView):
             # Normalized percentage comparison from start of period
             pt["portfolio_return_pct"] = round(((pt["total_equity"] - port_start) / port_start * 100.0), 2)
             pt["benchmark_return_pct"] = round(((b_val - bench_start) / bench_start * 100.0), 2)
+
 
         return Response({
             "portfolio_id": str(p.id),

@@ -11,9 +11,15 @@ export class PortfolioWebSocket {
   private isExplicitlyClosed = false;
 
   constructor(portfolioId: string) {
-    const proto = window.location.protocol === "https:" ? "wss:" : "ws:";
-    this.url = `${proto}//localhost:8000/ws/portfolio/${portfolioId}/`;
+    if (typeof import.meta !== "undefined" && import.meta.env?.VITE_WS_URL) {
+      this.url = `${import.meta.env.VITE_WS_URL}/ws/portfolio/${portfolioId}/`;
+    } else {
+      const proto = typeof window !== "undefined" && window.location?.protocol === "https:" ? "wss:" : "ws:";
+      const hostname = typeof window !== "undefined" && window.location?.hostname ? window.location.hostname : "localhost";
+      this.url = `${proto}//${hostname}:8000/ws/portfolio/${portfolioId}/`;
+    }
   }
+
 
   connect() {
     this.isExplicitlyClosed = false;

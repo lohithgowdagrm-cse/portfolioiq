@@ -4,6 +4,7 @@ from .base import *
 
 DEBUG = True
 ALLOWED_HOSTS = ["*"]
+CORS_ALLOW_ALL_ORIGINS = True
 
 
 use_sqlite = os.getenv("USE_SQLITE", "True").lower() in ("true", "1", "yes")

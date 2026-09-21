@@ -1,4 +1,12 @@
-const API_BASE = "http://localhost:8000/api/v1";
+const getApiBase = () => {
+  if (typeof import.meta !== "undefined" && import.meta.env?.VITE_API_URL) {
+    return import.meta.env.VITE_API_URL;
+  }
+  const hostname = typeof window !== "undefined" && window.location?.hostname ? window.location.hostname : "localhost";
+  return `http://${hostname}:8000/api/v1`;
+};
+
+const API_BASE = getApiBase();
 
 function getAuthHeaders(): Record<string, string> {
   const token = localStorage.getItem("portfolioiq_token");
@@ -143,6 +151,9 @@ export const api = {
     request<any>(`/alerts/events/${id}/ack/`, {
       method: "POST",
     }),
+
+  // Audit Trail
+  getAuditLogs: () => request<{ results: any[] }>("/audit/logs/"),
 
   // Market Data Universe
   getInstruments: (assetClass?: string) => {

@@ -34,14 +34,9 @@ export const AlertsView: React.FC<AlertsViewProps> = ({
     Promise.all([
       api.getAlertEvents().then((res) => setEvents(res.results || [])),
       api.getAlertRules().then((res) => setRules(res.results || [])),
-      fetch("http://localhost:8000/api/v1/audit/logs/", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("portfolioiq_token")}`,
-        },
-      })
-        .then((r) => (r.ok ? r.json() : { results: [] }))
-        .then((d) => setAuditLogs(d.results || [])),
+      api.getAuditLogs().then((res) => setAuditLogs(res.results || [])),
     ])
+
       .catch((err) => console.error("Error loading alerts/audit:", err))
       .finally(() => setIsLoading(false));
   };

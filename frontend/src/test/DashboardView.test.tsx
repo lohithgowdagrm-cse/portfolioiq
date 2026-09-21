@@ -1,10 +1,10 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
 import { DashboardView } from "../features/dashboard/DashboardView";
 import { PortfolioSummary } from "../types";
 
 // Mock resize observer and api call
-global.ResizeObserver = vi.fn().mockImplementation(() => ({
+(globalThis as any).ResizeObserver = vi.fn().mockImplementation(() => ({
   observe: vi.fn(),
   unobserve: vi.fn(),
   disconnect: vi.fn(),
@@ -35,7 +35,7 @@ const mockSummary: PortfolioSummary = {
 };
 
 describe("DashboardView Component", () => {
-  it("renders top metric cards with formatted Indian Rupee figures", () => {
+  it("renders top metric cards with formatted Indian Rupee figures", async () => {
     render(
       <DashboardView
         summary={mockSummary}
@@ -44,7 +44,10 @@ describe("DashboardView Component", () => {
       />
     );
 
-    expect(screen.getByText("Portfolio Value")).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText("Portfolio Value")).toBeInTheDocument();
+    });
+
     expect(screen.getAllByText("Day P&L")[0]).toBeInTheDocument();
     expect(screen.getByText("Total P&L")).toBeInTheDocument();
     expect(screen.getByText("Invested Capital")).toBeInTheDocument();
@@ -54,3 +57,4 @@ describe("DashboardView Component", () => {
     expect(screen.getByText("+₹24,820.20")).toBeInTheDocument();
   });
 });
+
