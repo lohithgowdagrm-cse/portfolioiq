@@ -1,8 +1,9 @@
 """Celery background tasks for market data ingestion and price polling."""
 import logging
-from celery import shared_task
+
 from apps.instruments.models import Instrument
 from apps.market_data.services.market_data_service import MarketDataService
+from celery import shared_task
 
 logger = logging.getLogger(__name__)
 

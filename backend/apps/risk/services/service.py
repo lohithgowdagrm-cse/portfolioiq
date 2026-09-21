@@ -1,19 +1,19 @@
 """Master risk analytics service coordinating all metric calculations."""
 import logging
-from typing import Dict, Any, List
-from decimal import Decimal
-from django.utils import timezone
+from typing import Any
+
+from apps.market_data.models import MarketPrice
 from apps.portfolios.models import Portfolio, PortfolioSnapshot
 from apps.portfolios.services.accounting import PortfolioCalculationService
 from apps.risk.models import RiskMetricSnapshot
-from apps.market_data.models import MarketPrice
-from .volatility import calculate_annualized_volatility
-from .sharpe import calculate_sharpe_ratio
+from django.utils import timezone
+
 from .beta import calculate_portfolio_beta
-from .drawdown import calculate_maximum_drawdown
-from .var import calculate_historical_var
 from .concentration import calculate_concentration_metrics
-from .stress_testing import StressTestingService
+from .drawdown import calculate_maximum_drawdown
+from .sharpe import calculate_sharpe_ratio
+from .var import calculate_historical_var
+from .volatility import calculate_annualized_volatility
 
 logger = logging.getLogger(__name__)
 
@@ -24,7 +24,7 @@ class RiskAnalyticsService:
     """
 
     @classmethod
-    def get_historical_returns(cls, portfolio: Portfolio, lookback_days: int = 90) -> List[float]:
+    def get_historical_returns(cls, portfolio: Portfolio, lookback_days: int = 90) -> list[float]:
         """
         Extracts daily percentage returns from portfolio snapshots.
         """
@@ -36,7 +36,7 @@ class RiskAnalyticsService:
         return returns
 
     @classmethod
-    def get_benchmark_returns(cls, symbol: str = "NIFTY50", lookback_days: int = 90) -> List[float]:
+    def get_benchmark_returns(cls, symbol: str = "NIFTY50", lookback_days: int = 90) -> list[float]:
         """
         Fetches historical daily returns for benchmark index.
         """
@@ -48,7 +48,7 @@ class RiskAnalyticsService:
         return returns
 
     @classmethod
-    def calculate_portfolio_risk(cls, portfolio: Portfolio) -> Dict[str, Any]:
+    def calculate_portfolio_risk(cls, portfolio: Portfolio) -> dict[str, Any]:
         """
         Calculates complete institutional risk profile for portfolio.
         """

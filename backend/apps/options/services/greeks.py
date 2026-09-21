@@ -1,7 +1,7 @@
 """Analytical options Greeks calculation module."""
 import math
-from typing import Dict, Any
 from decimal import Decimal
+
 from scipy.stats import norm
 
 
@@ -12,7 +12,7 @@ def calculate_options_greeks(
     volatility: float = 0.22,
     risk_free_rate: float = 0.065,
     is_call: bool = True,
-) -> Dict[str, Decimal]:
+) -> dict[str, Decimal]:
     """
     Computes analytical first- and second-order Greeks:
     - Delta (Δ): Price sensitivity w.r.t underlying spot

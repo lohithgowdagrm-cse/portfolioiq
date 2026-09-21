@@ -1,6 +1,7 @@
 """URL routes for instruments."""
 from django.urls import path
-from .views import SectorListView, InstrumentListView, InstrumentDetailView
+
+from .views import InstrumentDetailView, InstrumentListView, SectorListView
 
 urlpatterns = [
     path("sectors/", SectorListView.as_view(), name="sector_list"),

@@ -1,7 +1,8 @@
 """Sector and Instrument models for financial market universe."""
 import uuid
-from django.db import models
+
 from common.utilities.constants import AssetClass, BaseCurrency
+from django.db import models
 
 
 class Sector(models.Model):

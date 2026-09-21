@@ -1,18 +1,19 @@
 """Portfolio accounting and calculation services."""
 import logging
 from decimal import Decimal
-from typing import Dict, Any, List, Optional
-from django.db import transaction
-from django.utils import timezone
+from typing import Any
+
+from apps.market_data.models import MarketPrice
+from apps.portfolios.models import Portfolio, PortfolioSnapshot, Position
+from apps.transactions.models import Transaction
 from common.exceptions.base import (
-    InsufficientPositionException,
     FinancialValidationException,
+    InsufficientPositionException,
     InvalidPriceException,
 )
 from common.utilities.constants import TransactionType
-from apps.portfolios.models import Portfolio, Position, PortfolioSnapshot
-from apps.transactions.models import Transaction
-from apps.market_data.models import MarketPrice
+from django.db import transaction
+from django.utils import timezone
 
 logger = logging.getLogger(__name__)
 
@@ -24,7 +25,7 @@ class PortfolioCalculationService:
     """
 
     @staticmethod
-    def get_latest_market_price(instrument) -> Optional[MarketPrice]:
+    def get_latest_market_price(instrument) -> MarketPrice | None:
         """Fetches the latest recorded market price for an instrument."""
         return MarketPrice.objects.filter(instrument=instrument).order_by("-price_timestamp").first()
 
@@ -44,12 +45,12 @@ class PortfolioCalculationService:
         Applies a single transaction to update or create a Position record.
         Maintains weighted average cost, realized P&L, and invested capital.
         """
-        if quantity <= Decimal("0"):
+        if quantity <= Decimal(0):
             raise FinancialValidationException(
                 message="Transaction quantity must be strictly greater than zero.",
                 code="INVALID_QUANTITY"
             )
-        if price < Decimal("0"):
+        if price < Decimal(0):
             raise InvalidPriceException("Transaction price cannot be negative.")
 
         position, _ = Position.objects.get_or_create(
@@ -81,7 +82,7 @@ class PortfolioCalculationService:
                 cost_addition = (quantity * price) + fees + taxes
 
             new_invested = prior_invested + cost_addition
-            new_avg = (new_invested / new_qty) if new_qty > Decimal("0") else Decimal("0.0000")
+            new_avg = (new_invested / new_qty) if new_qty > Decimal(0) else Decimal("0.0000")
 
             position.quantity = new_qty
             position.average_buy_price = new_avg.quantize(Decimal("0.0001"))
@@ -103,7 +104,7 @@ class PortfolioCalculationService:
             trade_realized_pnl = net_proceeds - cost_of_sold_shares
             new_qty = prior_qty - quantity
 
-            if new_qty == Decimal("0"):
+            if new_qty == Decimal(0):
                 # Entire position closed
                 new_invested = Decimal("0.0000")
                 new_avg = Decimal("0.0000")
@@ -119,10 +120,10 @@ class PortfolioCalculationService:
         elif tx_type == TransactionType.SPLIT:
             # Stock split (e.g. 2-for-1 or 1-for-2): price is the split factor (new_shares / old_shares)
             # If price=2.0, 100 shares become 200, average cost halves.
-            if price <= Decimal("0"):
+            if price <= Decimal(0):
                 raise FinancialValidationException("Split factor must be strictly greater than zero.")
             new_qty = prior_qty * price
-            new_avg = prior_avg / price if price > Decimal("0") else prior_avg
+            new_avg = prior_avg / price if price > Decimal(0) else prior_avg
             position.quantity = new_qty.quantize(Decimal("0.0001"))
             position.average_buy_price = new_avg.quantize(Decimal("0.0001"))
 
@@ -135,7 +136,7 @@ class PortfolioCalculationService:
         return position
 
     @classmethod
-    def recalculate_portfolio_from_ledger(cls, portfolio: Portfolio) -> Dict[str, Any]:
+    def recalculate_portfolio_from_ledger(cls, portfolio: Portfolio) -> dict[str, Any]:
         """
         Deterministic full reconciliation: wipes temporary position balances and replays
         the entire chronological transaction ledger to guarantee 100% mathematical consistency.
@@ -173,7 +174,7 @@ class PortfolioCalculationService:
             return cls.calculate_portfolio_summary(portfolio)
 
     @classmethod
-    def calculate_portfolio_summary(cls, portfolio: Portfolio) -> Dict[str, Any]:
+    def calculate_portfolio_summary(cls, portfolio: Portfolio) -> dict[str, Any]:
         """
         Computes real-time portfolio aggregate metrics:
         - Invested Capital
@@ -198,7 +199,7 @@ class PortfolioCalculationService:
         for pos in all_positions:
             total_realized_pnl += pos.realized_pnl
 
-        position_details: List[Dict[str, Any]] = []
+        position_details: list[dict[str, Any]] = []
 
         for pos in positions:
             if pos.option_contract:
@@ -216,16 +217,16 @@ class PortfolioCalculationService:
 
             unrealized_pnl = market_val - pos.total_invested
             unrealized_pct = (
-                (unrealized_pnl / pos.total_invested * Decimal("100"))
-                if pos.total_invested > Decimal("0")
+                (unrealized_pnl / pos.total_invested * Decimal(100))
+                if pos.total_invested > Decimal(0)
                 else Decimal("0.0000")
             )
 
             # Day P&L for this position
             day_pnl = (ltp - prev_close) * pos.quantity
             day_pct = (
-                ((ltp - prev_close) / prev_close * Decimal("100"))
-                if prev_close > Decimal("0")
+                ((ltp - prev_close) / prev_close * Decimal(100))
+                if prev_close > Decimal(0)
                 else Decimal("0.0000")
             )
 
@@ -259,24 +260,24 @@ class PortfolioCalculationService:
         total_unrealized_pnl = current_holdings_value - total_invested
         total_pnl = total_unrealized_pnl + total_realized_pnl
         total_return_pct = (
-            (total_unrealized_pnl / total_invested * Decimal("100"))
-            if total_invested > Decimal("0")
+            (total_unrealized_pnl / total_invested * Decimal(100))
+            if total_invested > Decimal(0)
             else Decimal("0.0000")
         )
 
         # Baseline equity yesterday for day return %
         prev_equity = total_equity - total_day_pnl
         day_return_pct = (
-            (total_day_pnl / prev_equity * Decimal("100"))
-            if prev_equity > Decimal("0")
+            (total_day_pnl / prev_equity * Decimal(100))
+            if prev_equity > Decimal(0)
             else Decimal("0.0000")
         )
 
         # Calculate position weights
         for p in position_details:
-            if total_equity > Decimal("0"):
+            if total_equity > Decimal(0):
                 p["weight_pct"] = (
-                    (p["current_value"] / total_equity * Decimal("100")).quantize(Decimal("0.01"))
+                    (p["current_value"] / total_equity * Decimal(100)).quantize(Decimal("0.01"))
                 )
 
         return {

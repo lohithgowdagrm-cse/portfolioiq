@@ -1,7 +1,8 @@
 """URL configuration for accounts and authentication."""
 from django.urls import path
 from rest_framework_simplejwt.views import TokenRefreshView
-from .views import RegisterView, CustomTokenObtainPairView, MeView
+
+from .views import CustomTokenObtainPairView, MeView, RegisterView
 
 urlpatterns = [
     path("register/", RegisterView.as_view(), name="register"),

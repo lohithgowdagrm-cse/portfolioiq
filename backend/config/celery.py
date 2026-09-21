@@ -1,5 +1,6 @@
 """Celery application configuration for PortfolioIQ."""
 import os
+
 from celery import Celery
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.dev")
@@ -21,8 +22,8 @@ app.autodiscover_tasks([
 # Ensure task registration on worker startup
 try:
     import apps.market_data.tasks  # noqa
-    import apps.portfolios.tasks  # noqa
-    import apps.risk.tasks  # noqa
+    import apps.portfolios.tasks
+    import apps.risk.tasks
     import apps.alerts.tasks  # noqa
 except Exception:
     pass

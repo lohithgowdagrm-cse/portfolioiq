@@ -1,6 +1,6 @@
 """Serializers for Risk metrics and stress test requests."""
-from rest_framework import serializers
 from apps.risk.models import RiskMetricSnapshot
+from rest_framework import serializers
 
 
 class RiskMetricSnapshotSerializer(serializers.ModelSerializer):

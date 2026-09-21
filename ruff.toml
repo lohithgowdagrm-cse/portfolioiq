@@ -1,0 +1,28 @@
+target-version = "py312"
+line-length = 120
+
+exclude = [
+    ".git",
+    ".venv",
+    "__pycache__",
+    "*/migrations/*",
+    "node_modules",
+]
+
+[lint]
+select = ["E", "F", "W"]
+ignore = [
+    "E501",   # line length
+    "E402",   # module import order (standard in Django ASGI/settings)
+    "F403",   # from .base import *
+    "F405",   # undefined from star import
+    "F841",   # unused variable in tests
+    "W293",   # blank line contains whitespace
+    "W291",   # trailing whitespace
+]
+
+[lint.per-file-ignores]
+"__init__.py" = ["F401"]
+"*/migrations/*" = ["ALL"]
+"*/tests/*" = ["ALL"]
+"tests/*" = ["ALL"]

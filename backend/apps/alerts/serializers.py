@@ -1,7 +1,6 @@
 """Serializers for AlertRule and AlertEvent."""
+from apps.alerts.models import AlertEvent, AlertRule
 from rest_framework import serializers
-from apps.alerts.models import AlertRule, AlertEvent
-from apps.portfolios.models import Portfolio
 
 
 class AlertRuleSerializer(serializers.ModelSerializer):

@@ -1,6 +1,8 @@
 """Audit logging service."""
 import logging
-from common.middleware.audit_middleware import get_current_request, get_client_ip
+
+from common.middleware.audit_middleware import get_client_ip, get_current_request
+
 from .models import AuditLog
 
 logger = logging.getLogger(__name__)

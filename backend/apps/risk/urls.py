@@ -1,5 +1,6 @@
 """URL routes for risk analytics and stress tests."""
 from django.urls import path
+
 from .views import RiskMetricsView, StressTestView
 
 urlpatterns = [

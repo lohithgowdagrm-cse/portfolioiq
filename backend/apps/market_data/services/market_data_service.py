@@ -1,21 +1,22 @@
 """Market data service orchestrating providers, caching, and WebSocket dispatch."""
 import logging
-from typing import Dict, Any, List, Optional
 from decimal import Decimal
-from django.conf import settings
-from django.core.cache import cache
+from typing import Any
+
+from apps.instruments.models import Instrument
+from apps.market_data.base import MarketDataProvider
+from apps.market_data.models import MarketPrice
+from apps.market_data.providers.mock_provider import MockMarketDataProvider
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
-from apps.market_data.base import MarketDataProvider
-from apps.market_data.providers.mock_provider import MockMarketDataProvider
-from apps.market_data.models import MarketPrice
-from apps.instruments.models import Instrument
+from django.conf import settings
+from django.core.cache import cache
 
 logger = logging.getLogger(__name__)
 
 
 class MarketDataService:
-    _provider_instance: Optional[MarketDataProvider] = None
+    _provider_instance: MarketDataProvider | None = None
 
     @classmethod
     def get_provider(cls) -> MarketDataProvider:
@@ -30,7 +31,7 @@ class MarketDataService:
         return cls._provider_instance
 
     @classmethod
-    def fetch_and_record_quote(cls, symbol: str) -> Optional[MarketPrice]:
+    def fetch_and_record_quote(cls, symbol: str) -> MarketPrice | None:
         """
         Fetches latest quote, updates database record, and invalidates cache.
         """
@@ -73,7 +74,7 @@ class MarketDataService:
         return market_price
 
     @classmethod
-    def broadcast_tick_update(cls, symbol: str, quote: Dict[str, Any]):
+    def broadcast_tick_update(cls, symbol: str, quote: dict[str, Any]):
         """
         Broadcasts quote to portfolio channels whose holdings include this symbol.
         """

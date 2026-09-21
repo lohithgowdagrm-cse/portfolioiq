@@ -1,10 +1,10 @@
 """Portfolio Beta calculation against market benchmark."""
-import numpy as np
-from typing import List
 from decimal import Decimal
 
+import numpy as np
 
-def calculate_portfolio_beta(portfolio_returns: List[float], benchmark_returns: List[float]) -> Decimal:
+
+def calculate_portfolio_beta(portfolio_returns: list[float], benchmark_returns: list[float]) -> Decimal:
     """
     Computes Beta against benchmark:
     Beta = Cov(R_p, R_b) / Var(R_b)

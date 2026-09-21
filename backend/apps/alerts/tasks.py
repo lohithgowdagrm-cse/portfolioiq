@@ -1,13 +1,13 @@
 """Celery background tasks for evaluating risk alerts."""
 import logging
 from decimal import Decimal
-from celery import shared_task
-from django.utils import timezone
-from apps.alerts.models import AlertRule, AlertEvent
+
+from apps.alerts.models import AlertEvent, AlertRule
 from apps.portfolios.services.accounting import PortfolioCalculationService
 from apps.risk.services.service import RiskAnalyticsService
-from common.utilities.constants import AlertMetricType, AlertComparator
-from apps.market_data.services.market_data_service import MarketDataService
+from celery import shared_task
+from common.utilities.constants import AlertComparator, AlertMetricType
+from django.utils import timezone
 
 logger = logging.getLogger(__name__)
 

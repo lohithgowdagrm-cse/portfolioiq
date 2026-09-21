@@ -1,8 +1,9 @@
 """Custom User model for PortfolioIQ."""
 import uuid
-from django.db import models
-from django.contrib.auth.models import AbstractUser, BaseUserManager
+
 from common.utilities.constants import BaseCurrency
+from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.db import models
 
 
 class CustomUserManager(BaseUserManager):

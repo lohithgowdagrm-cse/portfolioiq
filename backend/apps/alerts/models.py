@@ -1,8 +1,9 @@
 """AlertRule and AlertEvent models for proactive portfolio risk management."""
 import uuid
-from django.db import models
+
+from common.utilities.constants import AlertComparator, AlertMetricType
 from django.conf import settings
-from common.utilities.constants import AlertMetricType, AlertComparator
+from django.db import models
 
 
 class AlertRule(models.Model):

@@ -1,11 +1,12 @@
 """Mock market data provider using geometric Brownian motion and curated seed prices."""
 import math
 import random
-from typing import Dict, List, Any
-from decimal import Decimal
 from datetime import datetime, timedelta
-from django.utils import timezone
+from decimal import Decimal
+from typing import Any
+
 from apps.market_data.base import MarketDataProvider
+from django.utils import timezone
 
 # Curated reference baseline quotes
 BASE_EQUITY_PRICES = {
@@ -37,11 +38,11 @@ class MockMarketDataProvider(MarketDataProvider):
     def __init__(self, seed: int = 42):
         self.random = random.Random(seed)
 
-    def get_latest_quote(self, symbol: str) -> Dict[str, Any]:
+    def get_latest_quote(self, symbol: str) -> dict[str, Any]:
         base = BASE_EQUITY_PRICES.get(symbol.upper(), Decimal("1000.00"))
         # Introduce small intraday variance (+- 1.5%)
         pct_change = Decimal(str(round(self.random.uniform(-1.5, 1.8), 2)))
-        change_amt = (base * pct_change / Decimal("100")).quantize(Decimal("0.05"))
+        change_amt = (base * pct_change / Decimal(100)).quantize(Decimal("0.05"))
         ltp = (base + change_amt).quantize(Decimal("0.05"))
         open_price = (base + Decimal(str(round(self.random.uniform(-0.5, 0.5), 2)))).quantize(Decimal("0.05"))
         high = max(ltp, open_price) + Decimal(str(round(self.random.uniform(5.0, 20.0), 2)))
@@ -60,7 +61,7 @@ class MockMarketDataProvider(MarketDataProvider):
             "timestamp": timezone.now(),
         }
 
-    def simulate_tick(self, symbol: str, current_price: Decimal, volatility: float = 0.015) -> Dict[str, Any]:
+    def simulate_tick(self, symbol: str, current_price: Decimal, volatility: float = 0.015) -> dict[str, Any]:
         """
         Step current price forward using geometric Brownian motion:
         dS = S * (mu*dt + sigma*sqrt(dt)*Z)
@@ -74,8 +75,8 @@ class MockMarketDataProvider(MarketDataProvider):
 
         change_amt = (new_price - current_price).quantize(Decimal("0.01"))
         change_pct = (
-            (change_amt / current_price * Decimal("100")).quantize(Decimal("0.01"))
-            if current_price > Decimal("0")
+            (change_amt / current_price * Decimal(100)).quantize(Decimal("0.01"))
+            if current_price > Decimal(0)
             else Decimal("0.00")
         )
 
@@ -89,7 +90,7 @@ class MockMarketDataProvider(MarketDataProvider):
 
     def get_historical_candles(
         self, symbol: str, start_date: datetime, end_date: datetime, interval: str = "1d"
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """
         Synthesizes realistic historical OHLCV data between start_date and end_date.
         """

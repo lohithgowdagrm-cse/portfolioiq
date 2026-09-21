@@ -1,6 +1,6 @@
 """Serializers for MarketPrice and historical quote data."""
-from rest_framework import serializers
 from apps.market_data.models import MarketPrice
+from rest_framework import serializers
 
 
 class MarketPriceSerializer(serializers.ModelSerializer):

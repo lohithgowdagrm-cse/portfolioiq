@@ -1,8 +1,8 @@
 """Serializers for Portfolio and Position models."""
-from rest_framework import serializers
-from decimal import Decimal
-from apps.portfolios.models import Portfolio, Position, PortfolioSnapshot
+
+from apps.portfolios.models import Portfolio, PortfolioSnapshot, Position
 from apps.portfolios.services.accounting import PortfolioCalculationService
+from rest_framework import serializers
 
 
 class PositionSerializer(serializers.ModelSerializer):

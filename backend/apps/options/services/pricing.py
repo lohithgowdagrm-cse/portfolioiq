@@ -1,7 +1,6 @@
 """Black-Scholes analytical options pricing model."""
 import math
-from decimal import Decimal
-from typing import Dict, Any
+
 from scipy.stats import norm
 
 

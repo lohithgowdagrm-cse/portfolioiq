@@ -1,5 +1,6 @@
 """Serializers and views for AuditLog."""
-from rest_framework import serializers, generics, permissions
+from rest_framework import generics, permissions, serializers
+
 from .models import AuditLog
 
 

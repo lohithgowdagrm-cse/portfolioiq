@@ -1,7 +1,8 @@
 """Views for Sectors and Instruments."""
-from rest_framework import generics, permissions, filters
-from .models import Sector, Instrument
-from .serializers import SectorSerializer, InstrumentSerializer
+from rest_framework import filters, generics, permissions
+
+from .models import Instrument, Sector
+from .serializers import InstrumentSerializer, SectorSerializer
 
 
 class SectorListView(generics.ListAPIView):

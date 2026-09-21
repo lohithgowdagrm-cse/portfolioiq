@@ -1,16 +1,15 @@
 """Risk engine and Options Greeks mathematical tests."""
-import pytest
 import math
 from decimal import Decimal
-from apps.risk.services.volatility import calculate_annualized_volatility
-from apps.risk.services.sharpe import calculate_sharpe_ratio
-from apps.risk.services.beta import calculate_portfolio_beta
-from apps.risk.services.drawdown import calculate_maximum_drawdown
-from apps.risk.services.var import calculate_historical_var
-from apps.risk.services.concentration import calculate_concentration_metrics
-from apps.risk.services.stress_testing import StressTestingService
-from apps.options.services.pricing import calculate_black_scholes_price
+
 from apps.options.services.greeks import calculate_options_greeks
+from apps.options.services.pricing import calculate_black_scholes_price
+from apps.risk.services.beta import calculate_portfolio_beta
+from apps.risk.services.concentration import calculate_concentration_metrics
+from apps.risk.services.drawdown import calculate_maximum_drawdown
+from apps.risk.services.sharpe import calculate_sharpe_ratio
+from apps.risk.services.var import calculate_historical_var
+from apps.risk.services.volatility import calculate_annualized_volatility
 
 
 def test_annualized_volatility():

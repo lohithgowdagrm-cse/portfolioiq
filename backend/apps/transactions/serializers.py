@@ -1,10 +1,8 @@
 """Serializers for financial transactions."""
-from rest_framework import serializers
 from decimal import Decimal
+
 from apps.transactions.models import Transaction
-from apps.instruments.models import Instrument
-from apps.portfolios.models import Portfolio
-from apps.options.models import OptionContract
+from rest_framework import serializers
 
 
 class TransactionSerializer(serializers.ModelSerializer):
@@ -46,11 +44,11 @@ class TransactionSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({"portfolio": "You do not own the specified portfolio."})
 
         qty = attrs.get("quantity")
-        if qty is not None and qty <= Decimal("0"):
+        if qty is not None and qty <= Decimal(0):
             raise serializers.ValidationError({"quantity": "Quantity must be strictly positive."})
 
         price = attrs.get("price")
-        if price is not None and price < Decimal("0"):
+        if price is not None and price < Decimal(0):
             raise serializers.ValidationError({"price": "Price cannot be negative."})
 
         return attrs

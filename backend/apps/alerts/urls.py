@@ -1,7 +1,8 @@
 """URL routes for alert rules and events."""
-from django.urls import path, include
+from django.urls import include, path
 from rest_framework.routers import DefaultRouter
-from .views import AlertRuleViewSet, AlertEventListView, AcknowledgeAlertView
+
+from .views import AcknowledgeAlertView, AlertEventListView, AlertRuleViewSet
 
 router = DefaultRouter()
 router.register(r"rules", AlertRuleViewSet, basename="alert_rule")

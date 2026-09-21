@@ -1,8 +1,8 @@
 """Abstract base class for all market data providers."""
 from abc import ABC, abstractmethod
-from typing import Dict, List, Optional, Any
-from decimal import Decimal
 from datetime import datetime
+from decimal import Decimal
+from typing import Any
 
 
 class MarketDataProvider(ABC):
@@ -12,7 +12,7 @@ class MarketDataProvider(ABC):
     """
 
     @abstractmethod
-    def get_latest_quote(self, symbol: str) -> Dict[str, Any]:
+    def get_latest_quote(self, symbol: str) -> dict[str, Any]:
         """
         Returns latest quote:
         {
@@ -28,20 +28,17 @@ class MarketDataProvider(ABC):
             "timestamp": datetime
         }
         """
-        pass
 
     @abstractmethod
     def get_historical_candles(
         self, symbol: str, start_date: datetime, end_date: datetime, interval: str = "1d"
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """
         Returns historical candle list with OHLCV data.
         """
-        pass
 
     @abstractmethod
-    def simulate_tick(self, symbol: str, current_price: Decimal, volatility: float = 0.015) -> Dict[str, Any]:
+    def simulate_tick(self, symbol: str, current_price: Decimal, volatility: float = 0.015) -> dict[str, Any]:
         """
         Generates a realistic stochastic tick step using geometric Brownian motion.
         """
-        pass

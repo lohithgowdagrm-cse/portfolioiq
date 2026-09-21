@@ -1,6 +1,7 @@
 """Production settings for PortfolioIQ."""
 import os
 import urllib.parse
+
 from .base import *
 
 DEBUG = False

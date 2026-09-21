@@ -1,6 +1,7 @@
 """URL routes for market data quotes and simulation."""
 from django.urls import path
-from .views import LatestQuoteView, HistoricalPricesView, SimulateTickView
+
+from .views import HistoricalPricesView, LatestQuoteView, SimulateTickView
 
 urlpatterns = [
     path("prices/<str:symbol>/", LatestQuoteView.as_view(), name="latest_quote"),

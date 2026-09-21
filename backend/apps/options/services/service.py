@@ -1,15 +1,16 @@
 """Options service orchestrating contract evaluation, Greeks aggregation, and expiration exposure."""
 import logging
-from typing import Dict, Any, List
 from decimal import Decimal
-from datetime import date
-from django.utils import timezone
-from apps.options.models import OptionContract
-from apps.portfolios.models import Portfolio, Position
+from typing import Any
+
 from apps.market_data.models import MarketPrice
 from apps.market_data.providers.mock_provider import BASE_EQUITY_PRICES
-from .pricing import calculate_black_scholes_price
+from apps.options.models import OptionContract
+from apps.portfolios.models import Portfolio, Position
+from django.utils import timezone
+
 from .greeks import calculate_options_greeks
+from .pricing import calculate_black_scholes_price
 
 logger = logging.getLogger(__name__)
 
@@ -23,7 +24,7 @@ class OptionsService:
         return BASE_EQUITY_PRICES.get(underlying.symbol, Decimal("1000.00"))
 
     @classmethod
-    def evaluate_contract(cls, contract: OptionContract) -> Dict[str, Any]:
+    def evaluate_contract(cls, contract: OptionContract) -> dict[str, Any]:
         """
         Computes analytical pricing, market metrics, and Greeks for a single OptionContract.
         """
@@ -85,7 +86,7 @@ class OptionsService:
         }
 
     @classmethod
-    def get_portfolio_options_breakdown(cls, portfolio: Portfolio) -> Dict[str, Any]:
+    def get_portfolio_options_breakdown(cls, portfolio: Portfolio) -> dict[str, Any]:
         """
         Evaluates all option positions in portfolio, aggregates portfolio-level Greeks,
         and computes expiration exposure buckets.
@@ -96,7 +97,7 @@ class OptionsService:
             quantity__gt=Decimal("0.0000"),
         ).select_related("option_contract", "option_contract__underlying")
 
-        positions_list: List[Dict[str, Any]] = []
+        positions_list: list[dict[str, Any]] = []
         total_delta = Decimal("0.0000")
         total_gamma = Decimal("0.0000")
         total_theta = Decimal("0.0000")

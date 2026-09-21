@@ -1,11 +1,11 @@
 """Sharpe ratio calculation with configurable risk-free benchmark."""
-import numpy as np
-from typing import List
 from decimal import Decimal
+
+import numpy as np
 
 
 def calculate_sharpe_ratio(
-    returns: List[float],
+    returns: list[float],
     annual_risk_free_rate: float = 0.065,  # 6.5% standard Indian sovereign 91-day T-bill baseline
     periods_per_year: int = 252,
 ) -> Decimal:

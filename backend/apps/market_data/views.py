@@ -1,10 +1,10 @@
 """Views for Market Data quotes, historical series, and tick simulation."""
-from rest_framework import views, permissions, status
-from rest_framework.response import Response
+from apps.instruments.models import Instrument
 from apps.market_data.models import MarketPrice
 from apps.market_data.serializers import MarketPriceSerializer
 from apps.market_data.services.market_data_service import MarketDataService
-from apps.instruments.models import Instrument
+from rest_framework import permissions, status, views
+from rest_framework.response import Response
 
 
 class LatestQuoteView(views.APIView):

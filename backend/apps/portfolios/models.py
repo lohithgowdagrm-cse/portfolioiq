@@ -1,9 +1,10 @@
 """Portfolio, Position, and PortfolioSnapshot models."""
 import uuid
 from decimal import Decimal
-from django.db import models
-from django.conf import settings
+
 from common.utilities.constants import BaseCurrency
+from django.conf import settings
+from django.db import models
 
 
 class Portfolio(models.Model):

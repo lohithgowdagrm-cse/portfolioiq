@@ -1,8 +1,8 @@
 """Views for managing risk alert rules and events."""
-from rest_framework import viewsets, generics, permissions, status
+from apps.alerts.models import AlertEvent, AlertRule
+from apps.alerts.serializers import AlertEventSerializer, AlertRuleSerializer
+from rest_framework import generics, permissions, status, viewsets
 from rest_framework.response import Response
-from apps.alerts.models import AlertRule, AlertEvent
-from apps.alerts.serializers import AlertRuleSerializer, AlertEventSerializer
 
 
 class AlertRuleViewSet(viewsets.ModelViewSet):

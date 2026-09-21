@@ -1,6 +1,6 @@
 """Serializers for OptionContract and options positions."""
-from rest_framework import serializers
 from apps.options.models import OptionContract
+from rest_framework import serializers
 
 
 class OptionContractSerializer(serializers.ModelSerializer):

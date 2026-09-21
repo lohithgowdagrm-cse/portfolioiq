@@ -1,5 +1,6 @@
 """RiskMetricSnapshot model for historical risk tracking."""
 import uuid
+
 from django.db import models
 
 

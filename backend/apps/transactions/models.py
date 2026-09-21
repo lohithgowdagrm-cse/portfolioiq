@@ -1,9 +1,10 @@
 """Transaction model storing immutable financial transaction ledger."""
 import uuid
 from decimal import Decimal
-from django.db import models
-from django.core.exceptions import ValidationError
+
 from common.utilities.constants import TransactionType
+from django.core.exceptions import ValidationError
+from django.db import models
 
 
 class Transaction(models.Model):
@@ -50,13 +51,13 @@ class Transaction(models.Model):
 
     def clean(self):
         super().clean()
-        if self.quantity is not None and self.quantity <= Decimal("0"):
+        if self.quantity is not None and self.quantity <= Decimal(0):
             raise ValidationError({"quantity": "Transaction quantity must be strictly greater than zero."})
-        if self.price is not None and self.price < Decimal("0"):
+        if self.price is not None and self.price < Decimal(0):
             raise ValidationError({"price": "Transaction price cannot be negative."})
-        if self.fees is not None and self.fees < Decimal("0"):
+        if self.fees is not None and self.fees < Decimal(0):
             raise ValidationError({"fees": "Fees cannot be negative."})
-        if self.taxes is not None and self.taxes < Decimal("0"):
+        if self.taxes is not None and self.taxes < Decimal(0):
             raise ValidationError({"taxes": "Taxes cannot be negative."})
 
     def save(self, *args, **kwargs):

@@ -1,6 +1,7 @@
 """Serializers for Sector and Instrument models."""
 from rest_framework import serializers
-from .models import Sector, Instrument
+
+from .models import Instrument, Sector
 
 
 class SectorSerializer(serializers.ModelSerializer):

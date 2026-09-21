@@ -1,8 +1,9 @@
 """Celery background tasks for scheduled risk calculations."""
 import logging
-from celery import shared_task
+
 from apps.portfolios.models import Portfolio
 from apps.risk.services.service import RiskAnalyticsService
+from celery import shared_task
 
 logger = logging.getLogger(__name__)
 

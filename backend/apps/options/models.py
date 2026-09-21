@@ -1,7 +1,8 @@
 """Option contract model."""
 import uuid
+
+from common.utilities.constants import OptionStyle, OptionType
 from django.db import models
-from common.utilities.constants import OptionType, OptionStyle
 
 
 class OptionContract(models.Model):

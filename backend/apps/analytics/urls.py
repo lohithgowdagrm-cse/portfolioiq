@@ -1,6 +1,7 @@
 """URL routes for portfolio analytics."""
 from django.urls import path
-from .views import PerformanceChartView, ExposureAnalysisView, MonthlyMatrixView
+
+from .views import ExposureAnalysisView, MonthlyMatrixView, PerformanceChartView
 
 urlpatterns = [
     path("performance/", PerformanceChartView.as_view(), name="performance_chart"),

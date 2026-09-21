@@ -1,5 +1,6 @@
 """Development settings for PortfolioIQ."""
 import os
+
 from .base import *
 
 DEBUG = True

@@ -1,7 +1,11 @@
 """Root URL Configuration for PortfolioIQ."""
 from django.contrib import admin
-from django.urls import path, include
-from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, SpectacularRedocView
+from django.urls import include, path
+from drf_spectacular.views import (
+    SpectacularAPIView,
+    SpectacularRedocView,
+    SpectacularSwaggerView,
+)
 
 api_v1_patterns = [
     path("auth/", include("apps.accounts.urls")),

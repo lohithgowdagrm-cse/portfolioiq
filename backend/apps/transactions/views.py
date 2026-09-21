@@ -1,10 +1,9 @@
 """Views for recording, filtering, and deleting transactions."""
-from rest_framework import viewsets, permissions, status
-from rest_framework.response import Response
 from apps.transactions.models import Transaction
 from apps.transactions.serializers import TransactionSerializer
 from apps.transactions.services.transaction_service import TransactionService
-from apps.portfolios.models import Portfolio
+from rest_framework import permissions, status, viewsets
+from rest_framework.response import Response
 
 
 class TransactionViewSet(viewsets.ModelViewSet):

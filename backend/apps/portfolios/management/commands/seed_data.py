@@ -1,29 +1,33 @@
 """Seed command populating realistic financial development dataset."""
 import random
+from datetime import timedelta
 from decimal import Decimal
-from datetime import datetime, timedelta
+
+from apps.accounts.models import User
+from apps.alerts.models import AlertEvent, AlertRule
+from apps.instruments.models import Instrument, Sector
+from apps.market_data.models import MarketPrice
+from apps.market_data.providers.mock_provider import (
+    BASE_EQUITY_PRICES,
+    MockMarketDataProvider,
+)
+from apps.options.models import OptionContract
+from apps.portfolios.models import Portfolio, PortfolioSnapshot, Position
+from apps.portfolios.services.accounting import PortfolioCalculationService
+from apps.risk.models import RiskMetricSnapshot
+from apps.transactions.models import Transaction
+from common.utilities.constants import (
+    AlertComparator,
+    AlertMetricType,
+    AssetClass,
+    BaseCurrency,
+    OptionStyle,
+    OptionType,
+    TransactionType,
+)
 from django.core.management.base import BaseCommand
 from django.db import transaction
 from django.utils import timezone
-from apps.accounts.models import User
-from apps.instruments.models import Sector, Instrument
-from apps.options.models import OptionContract
-from apps.portfolios.models import Portfolio, Position, PortfolioSnapshot
-from apps.transactions.models import Transaction
-from apps.market_data.models import MarketPrice
-from apps.market_data.providers.mock_provider import MockMarketDataProvider, BASE_EQUITY_PRICES
-from apps.portfolios.services.accounting import PortfolioCalculationService
-from apps.risk.models import RiskMetricSnapshot
-from apps.alerts.models import AlertRule, AlertEvent
-from common.utilities.constants import (
-    AssetClass,
-    BaseCurrency,
-    TransactionType,
-    OptionType,
-    OptionStyle,
-    AlertMetricType,
-    AlertComparator,
-)
 
 
 class Command(BaseCommand):
@@ -132,7 +136,7 @@ class Command(BaseCommand):
             prev_close = Decimal(str(round(float(BASE_EQUITY_PRICES.get(sym, Decimal("1000.00"))) * 0.75, 2)))
             for c in candles:
                 chg_amt = (c["close"] - prev_close).quantize(Decimal("0.01"))
-                chg_pct = ((chg_amt / prev_close * Decimal("100")) if prev_close > 0 else Decimal("0")).quantize(Decimal("0.01"))
+                chg_pct = ((chg_amt / prev_close * Decimal(100)) if prev_close > 0 else Decimal(0)).quantize(Decimal("0.01"))
                 all_market_prices.append(MarketPrice(
                     instrument=inst,
                     price=c["close"],
@@ -281,7 +285,7 @@ class Command(BaseCommand):
             inst = inst_map[sym]
             base_p = BASE_EQUITY_PRICES.get(sym, Decimal("500.00"))
             tx_price = (base_p * Decimal(str(round(random.uniform(0.88, 1.02), 2)))).quantize(Decimal("0.05"))
-            qty = Decimal(str(random.randint(20, 60) if base_p < Decimal("1000") else random.randint(10, 25)))
+            qty = Decimal(str(random.randint(20, 60) if base_p < Decimal(1000) else random.randint(10, 25)))
 
             Transaction.objects.create(
                 portfolio=p2,
@@ -479,4 +483,4 @@ class Command(BaseCommand):
         )
 
         self.stdout.write(self.style.SUCCESS("Database seeding completed successfully!"))
-        self.stdout.write(self.style.SUCCESS(f"Demo login: demo@portfolioiq.io / Password123!"))
+        self.stdout.write(self.style.SUCCESS("Demo login: demo@portfolioiq.io / Password123!"))

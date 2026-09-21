@@ -1,14 +1,14 @@
 """Portfolio concentration and diversification metrics."""
-from typing import List, Dict, Any
 from decimal import Decimal
+from typing import Any
 
 
-def calculate_concentration_metrics(positions: List[Dict[str, Any]], total_equity: Decimal) -> Dict[str, Any]:
+def calculate_concentration_metrics(positions: list[dict[str, Any]], total_equity: Decimal) -> dict[str, Any]:
     """
     Computes single-position, sector, and asset class concentration alongside
     the Herfindahl-Hirschman Index (HHI) for portfolio diversification assessment.
     """
-    if not positions or total_equity <= Decimal("0"):
+    if not positions or total_equity <= Decimal(0):
         return {
             "herfindahl_index": Decimal("0.0000"),
             "top_position_symbol": "N/A",
@@ -21,9 +21,9 @@ def calculate_concentration_metrics(positions: List[Dict[str, Any]], total_equit
 
     total_eq_float = float(total_equity)
     hhi = 0.0
-    sector_exposure: Dict[str, float] = {}
-    asset_exposure: Dict[str, float] = {}
-    weights: List[float] = []
+    sector_exposure: dict[str, float] = {}
+    asset_exposure: dict[str, float] = {}
+    weights: list[float] = []
 
     for pos in positions:
         curr_val = float(pos.get("current_value", 0))

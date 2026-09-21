@@ -1,10 +1,11 @@
 """Integration tests for PortfolioIQ REST API endpoints and IDOR authorization."""
-import pytest
 from decimal import Decimal
-from rest_framework.test import APIClient
+
+import pytest
 from apps.accounts.models import User
-from apps.portfolios.models import Portfolio
 from apps.instruments.models import Instrument, Sector
+from apps.portfolios.models import Portfolio
+from rest_framework.test import APIClient
 
 
 @pytest.mark.django_db

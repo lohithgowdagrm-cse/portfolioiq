@@ -1,15 +1,15 @@
 """Transaction management service orchestrating atomic ledger creation and auditing."""
 import logging
 from decimal import Decimal
-from django.db import transaction
-from django.utils import timezone
-from apps.transactions.models import Transaction
-from apps.portfolios.models import Portfolio
+
+from apps.audit.services import record_audit_log
 from apps.instruments.models import Instrument
 from apps.options.models import OptionContract
+from apps.portfolios.models import Portfolio
 from apps.portfolios.services.accounting import PortfolioCalculationService
-from apps.audit.services import record_audit_log
-from common.exceptions.base import FinancialValidationException
+from apps.transactions.models import Transaction
+from django.db import transaction
+from django.utils import timezone
 
 logger = logging.getLogger(__name__)
 
@@ -73,10 +73,7 @@ class TransactionService:
         if tx_type == "BUY":
             portfolio.cash_balance -= tx.total_amount
             portfolio.save(update_fields=["cash_balance", "updated_at"])
-        elif tx_type == "SELL":
-            portfolio.cash_balance += tx.total_amount
-            portfolio.save(update_fields=["cash_balance", "updated_at"])
-        elif tx_type == "DIVIDEND":
+        elif tx_type == "SELL" or tx_type == "DIVIDEND":
             portfolio.cash_balance += tx.total_amount
             portfolio.save(update_fields=["cash_balance", "updated_at"])
 

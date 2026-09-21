@@ -1,9 +1,9 @@
 """Maximum Drawdown and underwater curve calculation."""
-from typing import List, Dict, Any
 from decimal import Decimal
+from typing import Any
 
 
-def calculate_maximum_drawdown(equity_series: List[float]) -> Dict[str, Any]:
+def calculate_maximum_drawdown(equity_series: list[float]) -> dict[str, Any]:
     """
     Computes maximum peak-to-trough decline over an equity curve:
     Drawdown_t = (Peak_t - Value_t) / Peak_t
@@ -24,8 +24,7 @@ def calculate_maximum_drawdown(equity_series: List[float]) -> Dict[str, Any]:
     dd_series = []
 
     for val in equity_series:
-        if val > peak:
-            peak = val
+        peak = max(peak, val)
         dd = (peak - val) / peak if peak > 0 else 0.0
         dd_series.append(round(dd * 100.0, 2))
         if dd > max_dd:

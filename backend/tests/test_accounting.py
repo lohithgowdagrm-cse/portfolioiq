@@ -1,14 +1,17 @@
 """Accounting engine unit and integration tests."""
-import pytest
 from decimal import Decimal
-from django.utils import timezone
+
+import pytest
 from apps.accounts.models import User
-from apps.instruments.models import Sector, Instrument
-from apps.portfolios.models import Portfolio, Position, PortfolioSnapshot
+from apps.instruments.models import Instrument, Sector
+from apps.market_data.models import MarketPrice
+from apps.portfolios.models import Portfolio, Position
 from apps.portfolios.services.accounting import PortfolioCalculationService
 from apps.transactions.services.transaction_service import TransactionService
-from apps.market_data.models import MarketPrice
-from common.exceptions.base import InsufficientPositionException, FinancialValidationException
+from common.exceptions.base import (
+    InsufficientPositionException,
+)
+from django.utils import timezone
 
 
 @pytest.mark.django_db

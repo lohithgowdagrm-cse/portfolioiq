@@ -1,5 +1,6 @@
 """WebSocket URL routing for PortfolioIQ."""
 from django.urls import re_path
+
 from .consumers import PortfolioUpdatesConsumer
 
 websocket_urlpatterns = [

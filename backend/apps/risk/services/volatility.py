@@ -1,10 +1,10 @@
 """Annualized historical volatility calculation."""
-import numpy as np
-from typing import List
 from decimal import Decimal
 
+import numpy as np
 
-def calculate_annualized_volatility(returns: List[float], periods_per_year: int = 252) -> Decimal:
+
+def calculate_annualized_volatility(returns: list[float], periods_per_year: int = 252) -> Decimal:
     """
     Computes annualized historical volatility from a series of daily returns:
     sigma_annualized = std(returns, ddof=1) * sqrt(periods_per_year) * 100

@@ -2,7 +2,7 @@
 from decimal import Decimal
 
 
-def format_inr(amount: Decimal | float | int, show_sign: bool = False) -> str:
+def format_inr(amount: Decimal | float, show_sign: bool = False) -> str:
     """
     Formats a numeric value into standard Indian numbering system format (e.g. ₹10,84,230.45).
     """
@@ -33,7 +33,7 @@ def format_inr(amount: Decimal | float | int, show_sign: bool = False) -> str:
     return f"{sign}₹{formatted_int}.{decimal_part}"
 
 
-def format_pct(pct: Decimal | float | int, show_sign: bool = True) -> str:
+def format_pct(pct: Decimal | float, show_sign: bool = True) -> str:
     """
     Formats percentage values (e.g. +2.34%, -1.82%).
     """

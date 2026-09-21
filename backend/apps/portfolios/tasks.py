@@ -1,8 +1,9 @@
 """Celery background tasks for portfolio calculations and snapshot generation."""
 import logging
-from celery import shared_task
+
 from apps.portfolios.models import Portfolio
 from apps.portfolios.services.accounting import PortfolioCalculationService
+from celery import shared_task
 
 logger = logging.getLogger(__name__)
 

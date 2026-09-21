@@ -1,20 +1,21 @@
 """Historical Value at Risk (VaR) calculation."""
-import numpy as np
-from typing import List, Dict, Any
 from decimal import Decimal
+from typing import Any
+
+import numpy as np
 
 
 def calculate_historical_var(
-    returns: List[float],
+    returns: list[float],
     portfolio_value: Decimal,
-    confidence_levels: List[float] = [0.95, 0.99],
-) -> Dict[str, Any]:
+    confidence_levels: list[float] = [0.95, 0.99],
+) -> dict[str, Any]:
     """
     Computes non-parametric Historical Value at Risk (VaR):
     Sorts empirical returns and takes the (1 - confidence_level) quantile.
     VaR ($) = -quantile * portfolio_value
     """
-    if not returns or len(returns) < 10 or portfolio_value <= Decimal("0"):
+    if not returns or len(returns) < 10 or portfolio_value <= Decimal(0):
         return {
             "var_95_dollar": Decimal("0.00"),
             "var_95_pct": Decimal("0.00"),

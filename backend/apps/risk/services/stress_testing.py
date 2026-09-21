@@ -1,7 +1,8 @@
 """Portfolio stress testing and hypothetical scenario simulation."""
-from typing import Dict, Any, List
 from decimal import Decimal
-from apps.portfolios.models import Portfolio, Position
+from typing import Any
+
+from apps.portfolios.models import Portfolio
 from apps.portfolios.services.accounting import PortfolioCalculationService
 
 
@@ -15,8 +16,8 @@ class StressTestingService:
         cls,
         portfolio: Portfolio,
         market_shock_pct: float = 0.0,
-        custom_shocks: Dict[str, float] = None,
-    ) -> Dict[str, Any]:
+        custom_shocks: dict[str, float] = None,
+    ) -> dict[str, Any]:
         """
         Runs a stress scenario:
         - market_shock_pct: broad index drop (e.g. -5.0, -10.0, -20.0). Asset impact is scaled by Beta if available or direct shock.
@@ -51,8 +52,8 @@ class StressTestingService:
             shocked_val = max(Decimal("0.00"), curr_val * Decimal(str(applied_factor))).quantize(Decimal("0.01"))
             diff_dollar = (shocked_val - curr_val).quantize(Decimal("0.01"))
             diff_pct = (
-                ((shocked_val - curr_val) / curr_val * Decimal("100")).quantize(Decimal("0.01"))
-                if curr_val > Decimal("0")
+                ((shocked_val - curr_val) / curr_val * Decimal(100)).quantize(Decimal("0.01"))
+                if curr_val > Decimal(0)
                 else Decimal("0.00")
             )
 
@@ -71,8 +72,8 @@ class StressTestingService:
         projected_equity = (new_holdings_value + cash_balance).quantize(Decimal("0.01"))
         total_dollar_change = (projected_equity - current_equity).quantize(Decimal("0.01"))
         total_pct_change = (
-            ((projected_equity - current_equity) / current_equity * Decimal("100")).quantize(Decimal("0.01"))
-            if current_equity > Decimal("0")
+            ((projected_equity - current_equity) / current_equity * Decimal(100)).quantize(Decimal("0.01"))
+            if current_equity > Decimal(0)
             else Decimal("0.00")
         )
 
