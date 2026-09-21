@@ -1,0 +1,1732 @@
+openapi: 3.0.3
+info:
+  title: PortfolioIQ API
+  version: 1.0.0
+  description: Real-Time Portfolio & Risk Analytics Engine REST API
+paths:
+  /api/v1/alerts/events/:
+    get:
+      operationId: v1_alerts_events_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAlertEventList'
+          description: ''
+  /api/v1/alerts/events/{id}/ack/:
+    post:
+      operationId: v1_alerts_events_ack_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/alerts/rules/:
+    get:
+      operationId: v1_alerts_rules_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAlertRuleList'
+          description: ''
+    post:
+      operationId: v1_alerts_rules_create
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlertRuleRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AlertRuleRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AlertRuleRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlertRule'
+          description: ''
+  /api/v1/alerts/rules/{id}/:
+    get:
+      operationId: v1_alerts_rules_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlertRule'
+          description: ''
+    delete:
+      operationId: v1_alerts_rules_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/analytics/exposure/:
+    get:
+      operationId: v1_analytics_exposure_retrieve
+      description: Returns asset allocation, sector weights, and single-stock concentration.
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/analytics/monthly-matrix/:
+    get:
+      operationId: v1_analytics_monthly_matrix_retrieve
+      description: Returns monthly return matrix (years x months heatmap grid).
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/analytics/performance/:
+    get:
+      operationId: v1_analytics_performance_retrieve
+      description: |-
+        Returns time-series equity performance curves with benchmark comparison
+        supporting 1D, 1W, 1M, 3M, 6M, 1Y, ALL intervals.
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/audit/logs/:
+    get:
+      operationId: v1_audit_logs_list
+      description: List audit events scoped to current user or all events for staff.
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAuditLogList'
+          description: ''
+  /api/v1/auth/login/:
+    post:
+      operationId: v1_auth_login_create
+      description: Obtain JWT token pair (access + refresh) along with user payload.
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomTokenObtainPairRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CustomTokenObtainPairRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CustomTokenObtainPairRequest'
+        required: true
+      responses:
+        '200':
+          description: No response body
+  /api/v1/auth/me/:
+    get:
+      operationId: v1_auth_me_retrieve
+      description: Retrieve or update the authenticated user's profile.
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+          description: ''
+    put:
+      operationId: v1_auth_me_update
+      description: Retrieve or update the authenticated user's profile.
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserProfileRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserProfileRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserProfileRequest'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+          description: ''
+    patch:
+      operationId: v1_auth_me_partial_update
+      description: Retrieve or update the authenticated user's profile.
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserProfileRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUserProfileRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUserProfileRequest'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+          description: ''
+  /api/v1/auth/refresh/:
+    post:
+      operationId: v1_auth_refresh_create
+      description: |-
+        Takes a refresh type JSON web token and returns an access type JSON web
+        token if the refresh token is valid.
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenRefresh'
+          description: ''
+  /api/v1/auth/register/:
+    post:
+      operationId: v1_auth_register_create
+      description: Register a new user account.
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegisterRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserRegisterRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserRegisterRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserRegister'
+          description: ''
+  /api/v1/instruments/:
+    get:
+      operationId: v1_instruments_list
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedInstrumentList'
+          description: ''
+  /api/v1/instruments/{symbol}/:
+    get:
+      operationId: v1_instruments_retrieve
+      parameters:
+      - in: path
+        name: symbol
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Instrument'
+          description: ''
+  /api/v1/instruments/sectors/:
+    get:
+      operationId: v1_instruments_sectors_list
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Sector'
+          description: ''
+  /api/v1/market-data/history/{symbol}/:
+    get:
+      operationId: v1_market_data_history_retrieve
+      parameters:
+      - in: path
+        name: symbol
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/market-data/prices/{symbol}/:
+    get:
+      operationId: v1_market_data_prices_retrieve
+      parameters:
+      - in: path
+        name: symbol
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/market-data/simulate-tick/:
+    post:
+      operationId: v1_market_data_simulate_tick_create
+      description: |-
+        Triggers a live price tick simulation step and broadcasts the update
+        via WebSockets to active clients.
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/options/contracts/:
+    get:
+      operationId: v1_options_contracts_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedOptionContractList'
+          description: ''
+  /api/v1/options/portfolio-greeks/:
+    get:
+      operationId: v1_options_portfolio_greeks_retrieve
+      description: Returns aggregated portfolio Greeks (Delta, Gamma, Theta, Vega)
+        and expiration horizon.
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/options/positions/:
+    get:
+      operationId: v1_options_positions_retrieve
+      description: Returns open options positions with live calculated Greeks and
+        expiration countdowns.
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/portfolios/:
+    get:
+      operationId: v1_portfolios_list
+      description: |-
+        CRUD ViewSet for portfolios with dashboard summaries and holdings endpoints.
+        Strictly isolated to authenticated user.
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedPortfolioList'
+          description: ''
+    post:
+      operationId: v1_portfolios_create
+      description: |-
+        CRUD ViewSet for portfolios with dashboard summaries and holdings endpoints.
+        Strictly isolated to authenticated user.
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PortfolioRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PortfolioRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PortfolioRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Portfolio'
+          description: ''
+  /api/v1/portfolios/{id}/:
+    get:
+      operationId: v1_portfolios_retrieve
+      description: |-
+        CRUD ViewSet for portfolios with dashboard summaries and holdings endpoints.
+        Strictly isolated to authenticated user.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Portfolio'
+          description: ''
+    put:
+      operationId: v1_portfolios_update
+      description: |-
+        CRUD ViewSet for portfolios with dashboard summaries and holdings endpoints.
+        Strictly isolated to authenticated user.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PortfolioRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PortfolioRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PortfolioRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Portfolio'
+          description: ''
+    patch:
+      operationId: v1_portfolios_partial_update
+      description: |-
+        CRUD ViewSet for portfolios with dashboard summaries and holdings endpoints.
+        Strictly isolated to authenticated user.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedPortfolioRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedPortfolioRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedPortfolioRequest'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Portfolio'
+          description: ''
+    delete:
+      operationId: v1_portfolios_destroy
+      description: |-
+        CRUD ViewSet for portfolios with dashboard summaries and holdings endpoints.
+        Strictly isolated to authenticated user.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/portfolios/{id}/positions/:
+    get:
+      operationId: v1_portfolios_positions_retrieve
+      description: Returns holdings table with live quote, weighted returns, and allocation
+        metrics.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Portfolio'
+          description: ''
+  /api/v1/portfolios/{id}/snapshots/:
+    get:
+      operationId: v1_portfolios_snapshots_retrieve
+      description: Returns historical equity snapshots for performance charting.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Portfolio'
+          description: ''
+  /api/v1/portfolios/{id}/summary/:
+    get:
+      operationId: v1_portfolios_summary_retrieve
+      description: Returns high-density 5-second executive summary for dashboard.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Portfolio'
+          description: ''
+  /api/v1/risk/metrics/:
+    get:
+      operationId: v1_risk_metrics_retrieve
+      description: Returns complete institutional risk metrics (Volatility, Sharpe,
+        Beta, Max Drawdown, VaR 95/99).
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/risk/stress-test/:
+    post:
+      operationId: v1_risk_stress_test_create
+      description: Executes macro market shock or custom asset stress test scenario.
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/transactions/:
+    get:
+      operationId: v1_transactions_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedTransactionList'
+          description: ''
+    post:
+      operationId: v1_transactions_create
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TransactionRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TransactionRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+          description: ''
+  /api/v1/transactions/{id}/:
+    get:
+      operationId: v1_transactions_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+          description: ''
+    delete:
+      operationId: v1_transactions_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+components:
+  schemas:
+    AlertEvent:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        rule:
+          type: string
+          format: uuid
+          readOnly: true
+        metric_type:
+          type: string
+          readOnly: true
+        portfolio_name:
+          type: string
+          readOnly: true
+        threshold_value:
+          type: string
+          readOnly: true
+        triggered_value:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,14}(?:\.\d{0,4})?$
+          readOnly: true
+        message:
+          type: string
+          readOnly: true
+        is_acknowledged:
+          type: boolean
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - is_acknowledged
+      - message
+      - metric_type
+      - portfolio_name
+      - rule
+      - threshold_value
+      - triggered_value
+    AlertRule:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        portfolio:
+          type: string
+          format: uuid
+        portfolio_name:
+          type: string
+          readOnly: true
+        metric_type:
+          $ref: '#/components/schemas/MetricTypeEnum'
+        comparator:
+          $ref: '#/components/schemas/ComparatorEnum'
+        threshold_value:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,14}(?:\.\d{0,4})?$
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - metric_type
+      - portfolio
+      - portfolio_name
+      - threshold_value
+    AlertRuleRequest:
+      type: object
+      properties:
+        portfolio:
+          type: string
+          format: uuid
+        metric_type:
+          $ref: '#/components/schemas/MetricTypeEnum'
+        comparator:
+          $ref: '#/components/schemas/ComparatorEnum'
+        threshold_value:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,14}(?:\.\d{0,4})?$
+        is_active:
+          type: boolean
+      required:
+      - metric_type
+      - portfolio
+      - threshold_value
+    AssetClassEnum:
+      enum:
+      - EQUITY
+      - ETF
+      - OPTION
+      - CRYPTO
+      - CASH
+      type: string
+      description: |-
+        * `EQUITY` - Equity
+        * `ETF` - Exchange Traded Fund
+        * `OPTION` - Options Contract
+        * `CRYPTO` - Cryptocurrency
+        * `CASH` - Cash Equivalent
+    AuditLog:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user_email:
+          type: string
+          format: email
+          readOnly: true
+        action:
+          type: string
+          readOnly: true
+        entity_type:
+          type: string
+          readOnly: true
+        entity_id:
+          type: string
+          readOnly: true
+        metadata:
+          readOnly: true
+        ip_address:
+          type: string
+          readOnly: true
+          nullable: true
+        timestamp:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - action
+      - entity_id
+      - entity_type
+      - id
+      - ip_address
+      - metadata
+      - timestamp
+      - user_email
+    ComparatorEnum:
+      enum:
+      - GT
+      - LT
+      - GTE
+      - LTE
+      type: string
+      description: |-
+        * `GT` - Greater Than
+        * `LT` - Less Than
+        * `GTE` - Greater Than or Equal
+        * `LTE` - Less Than or Equal
+    CustomTokenObtainPairRequest:
+      type: object
+      description: Custom JWT token serializer including user metadata.
+      properties:
+        email:
+          type: string
+          writeOnly: true
+          minLength: 1
+        password:
+          type: string
+          writeOnly: true
+          minLength: 1
+      required:
+      - email
+      - password
+    DefaultCurrencyEnum:
+      enum:
+      - INR
+      - USD
+      - EUR
+      - GBP
+      type: string
+      description: |-
+        * `INR` - Indian Rupee (₹)
+        * `USD` - US Dollar ($)
+        * `EUR` - Euro (€)
+        * `GBP` - British Pound (£)
+    Instrument:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        symbol:
+          type: string
+          maxLength: 30
+        name:
+          type: string
+          maxLength: 200
+        asset_class:
+          $ref: '#/components/schemas/AssetClassEnum'
+        sector:
+          type: integer
+          nullable: true
+        sector_name:
+          type: string
+          readOnly: true
+        exchange:
+          type: string
+          maxLength: 30
+        currency:
+          $ref: '#/components/schemas/DefaultCurrencyEnum'
+        is_active:
+          type: boolean
+        latest_price:
+          type: string
+          readOnly: true
+        change_percent:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - change_percent
+      - created_at
+      - id
+      - latest_price
+      - name
+      - sector_name
+      - symbol
+    MetricTypeEnum:
+      enum:
+      - DRAWDOWN
+      - CONCENTRATION
+      - DAILY_LOSS
+      - VOLATILITY
+      - OPTION_EXPIRY
+      type: string
+      description: |-
+        * `DRAWDOWN` - Portfolio Drawdown
+        * `CONCENTRATION` - Position Weight Concentration
+        * `DAILY_LOSS` - Daily Loss Breach
+        * `VOLATILITY` - Volatility Threshold
+        * `OPTION_EXPIRY` - Option Expiry Horizon
+    OptionContract:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        underlying:
+          type: string
+          format: uuid
+        symbol:
+          type: string
+          readOnly: true
+        underlying_name:
+          type: string
+          readOnly: true
+        option_type:
+          $ref: '#/components/schemas/OptionTypeEnum'
+        strike_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,14}(?:\.\d{0,4})?$
+        expiration_date:
+          type: string
+          format: date
+        contract_multiplier:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        style:
+          $ref: '#/components/schemas/StyleEnum'
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - expiration_date
+      - id
+      - option_type
+      - strike_price
+      - symbol
+      - underlying
+      - underlying_name
+    OptionTypeEnum:
+      enum:
+      - CALL
+      - PUT
+      type: string
+      description: |-
+        * `CALL` - Call
+        * `PUT` - Put
+    PaginatedAlertEventList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AlertEvent'
+    PaginatedAlertRuleList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AlertRule'
+    PaginatedAuditLogList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuditLog'
+    PaginatedInstrumentList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Instrument'
+    PaginatedOptionContractList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/OptionContract'
+    PaginatedPortfolioList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Portfolio'
+    PaginatedTransactionList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Transaction'
+    PatchedPortfolioRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 150
+        description:
+          type: string
+        base_currency:
+          $ref: '#/components/schemas/DefaultCurrencyEnum'
+        cash_balance:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,14}(?:\.\d{0,4})?$
+        is_default:
+          type: boolean
+    PatchedUserProfileRequest:
+      type: object
+      properties:
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        default_currency:
+          $ref: '#/components/schemas/DefaultCurrencyEnum'
+    Portfolio:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 150
+        description:
+          type: string
+        base_currency:
+          $ref: '#/components/schemas/DefaultCurrencyEnum'
+        cash_balance:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,14}(?:\.\d{0,4})?$
+        is_default:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        total_equity:
+          type: string
+          readOnly: true
+        total_invested:
+          type: string
+          readOnly: true
+        unrealized_pnl:
+          type: string
+          readOnly: true
+        total_return_pct:
+          type: string
+          readOnly: true
+        day_pnl:
+          type: string
+          readOnly: true
+        day_return_pct:
+          type: string
+          readOnly: true
+        positions_count:
+          type: string
+          readOnly: true
+      required:
+      - created_at
+      - day_pnl
+      - day_return_pct
+      - id
+      - name
+      - positions_count
+      - total_equity
+      - total_invested
+      - total_return_pct
+      - unrealized_pnl
+      - updated_at
+    PortfolioRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 150
+        description:
+          type: string
+        base_currency:
+          $ref: '#/components/schemas/DefaultCurrencyEnum'
+        cash_balance:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,14}(?:\.\d{0,4})?$
+        is_default:
+          type: boolean
+      required:
+      - name
+    Sector:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        code:
+          type: string
+          maxLength: 30
+        description:
+          type: string
+      required:
+      - code
+      - id
+      - name
+    StyleEnum:
+      enum:
+      - AMERICAN
+      - EUROPEAN
+      type: string
+      description: |-
+        * `AMERICAN` - American
+        * `EUROPEAN` - European
+    TokenRefresh:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+      required:
+      - access
+      - refresh
+    TokenRefreshRequest:
+      type: object
+      properties:
+        refresh:
+          type: string
+          minLength: 1
+      required:
+      - refresh
+    Transaction:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        portfolio:
+          type: string
+          format: uuid
+        instrument:
+          type: string
+          format: uuid
+        symbol:
+          type: string
+          readOnly: true
+        instrument_name:
+          type: string
+          readOnly: true
+        option_contract:
+          type: string
+          format: uuid
+          nullable: true
+        option_desc:
+          type: string
+          readOnly: true
+        transaction_type:
+          $ref: '#/components/schemas/TransactionTypeEnum'
+        quantity:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,14}(?:\.\d{0,4})?$
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,14}(?:\.\d{0,4})?$
+        fees:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,14}(?:\.\d{0,4})?$
+        taxes:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,14}(?:\.\d{0,4})?$
+        total_amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,14}(?:\.\d{0,4})?$
+          readOnly: true
+        executed_at:
+          type: string
+          format: date-time
+        notes:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - executed_at
+      - id
+      - instrument
+      - instrument_name
+      - option_desc
+      - portfolio
+      - price
+      - quantity
+      - symbol
+      - total_amount
+      - transaction_type
+    TransactionRequest:
+      type: object
+      properties:
+        portfolio:
+          type: string
+          format: uuid
+        instrument:
+          type: string
+          format: uuid
+        option_contract:
+          type: string
+          format: uuid
+          nullable: true
+        transaction_type:
+          $ref: '#/components/schemas/TransactionTypeEnum'
+        quantity:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,14}(?:\.\d{0,4})?$
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,14}(?:\.\d{0,4})?$
+        fees:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,14}(?:\.\d{0,4})?$
+        taxes:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,14}(?:\.\d{0,4})?$
+        executed_at:
+          type: string
+          format: date-time
+        notes:
+          type: string
+      required:
+      - executed_at
+      - instrument
+      - portfolio
+      - price
+      - quantity
+      - transaction_type
+    TransactionTypeEnum:
+      enum:
+      - BUY
+      - SELL
+      - DIVIDEND
+      - BONUS
+      - SPLIT
+      type: string
+      description: |-
+        * `BUY` - Buy
+        * `SELL` - Sell
+        * `DIVIDEND` - Dividend
+        * `BONUS` - Bonus Shares
+        * `SPLIT` - Stock Split
+    UserProfile:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        email:
+          type: string
+          format: email
+          readOnly: true
+          title: Email address
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        default_currency:
+          $ref: '#/components/schemas/DefaultCurrencyEnum'
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - email
+      - id
+    UserProfileRequest:
+      type: object
+      properties:
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        default_currency:
+          $ref: '#/components/schemas/DefaultCurrencyEnum'
+    UserRegister:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        email:
+          type: string
+          format: email
+          title: Email address
+          maxLength: 254
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        default_currency:
+          $ref: '#/components/schemas/DefaultCurrencyEnum'
+      required:
+      - email
+      - id
+    UserRegisterRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          minLength: 1
+          title: Email address
+          maxLength: 254
+        password:
+          type: string
+          writeOnly: true
+          minLength: 8
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        default_currency:
+          $ref: '#/components/schemas/DefaultCurrencyEnum'
+      required:
+      - email
+      - password
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
